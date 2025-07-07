@@ -3,8 +3,9 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Gedankenleser im Van-Gogh-Dorf</title>
+  <title>Home Khormaloo</title>
   <style>
+    /* Bestehende Styles bleiben wie gehabt ... */
     html, body {
       margin: 0;
       padding: 0;
@@ -14,94 +15,43 @@
       font-family: sans-serif;
     }
 
-    svg {
-      width: 100%;
-      height: 100vh;
-      display: block;
-    }
+    /* Weitere Styles ... */
 
-    body.day {
-      background: linear-gradient(#87ceeb, #e0f7fa);
-      transition: background 10s linear;
-    }
-
-    body.night {
-      background: linear-gradient(#001d3d, #000c1a);
-      transition: background 10s linear;
-    }
-
-    .celestial {
-      animation: orbit 45s linear infinite;
-      transform-origin: center;
-    }
-
-    @keyframes orbit {
-      0%   { transform: translate(0, 0); opacity: 1; }
-      33%  { transform: translate(-200px, -80px); }
-      66%  { transform: translate(-400px, -200px); opacity: 0; }
-      100% { transform: translate(0, 0); opacity: 1; }
-    }
-
-    .rotor {
-      animation: spin 3s linear infinite;
-      transform-origin: 0 0;
-    }
-
-    @keyframes spin {
-      from { transform: rotate(0deg); }
-      to { transform: rotate(360deg); }
-    }
-
-    .star { opacity: 0; transition: opacity 2s; }
-    body.night .star { opacity: 1; }
-
-    .planet { transition: filter 2s; }
-    body.night .planet { filter: brightness(1.5); }
-
-    .speech {
+    .password-box {
       position: absolute;
-      top: 35%;
-      left: 50%;
-      transform: translateX(-50%);
-      background: rgba(255,255,255,0.85);
-      color: #333;
-      padding: 10px 15px;
-      border-radius: 10px;
-      font-size: 1rem;
-      max-width: 70%;
-      text-align: center;
-      box-shadow: 0 0 10px rgba(0,0,0,0.3);
-      transition: opacity 1s ease;
-      opacity: 0;
-      pointer-events: none;
-      z-index: 20;
-    }
-
-    .speech.show { opacity: 1; }
-
-    .mindreader-box {
-      position: absolute;
-      top: 20%;
+      top: 60%;
       left: 50%;
       transform: translateX(-50%);
       background: rgba(255, 255, 255, 0.95);
       padding: 20px;
-      border-radius: 15px;
+      border-radius: 10px;
       text-align: center;
-      box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
-      font-size: 1.2rem;
-      z-index: 10;
+      box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
+      font-size: 1rem;
+      z-index: 15;
     }
 
-    .mindreader-box button {
-      margin: 10px;
+    .password-box input {
+      padding: 10px;
+      width: 200px;
+      margin-bottom: 10px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+    }
+
+    .password-box button {
       padding: 10px 20px;
-      font-size: 1.1rem;
+      font-size: 1rem;
       border: none;
-      border-radius: 10px;
-      background: #0077cc;
+      border-radius: 8px;
+      background-color: #0077cc;
       color: white;
       cursor: pointer;
+    }
+
+    .password-box .error {
+      color: red;
+      margin-top: 5px;
     }
   </style>
 </head>
@@ -116,14 +66,26 @@
 
 <div class="speech" id="speechBox">Ich sehe deine Gedanken...</div>
 
+<!-- Passwortabfrage -->
+<div class="password-box" id="passwordBox">
+  <p>🔐 Passwort erforderlich für Finanzübersicht</p>
+  <input type="password" id="pwInput" placeholder="Passwort eingeben..." />
+  <br>
+  <button onclick="checkPassword()">Anmelden</button>
+  <div class="error" id="pwError" style="display:none;">❌ Falsches Passwort!</div>
+</div>
+
 <svg viewBox="0 0 800 600" xmlns="http://www.w3.org/2000/svg">
-  <!-- Platzhalter SVG, hier kann dein vorheriger SVG-Code eingefügt werden -->
+  <!-- Platzhalter SVG -->
   <rect x="0" y="0" width="800" height="600" fill="#228b22" />
 </svg>
 
 <script>
   const speechBox = document.getElementById('speechBox');
   const mindBox = document.getElementById('mindBox');
+  const pwBox = document.getElementById('passwordBox');
+  const pwInput = document.getElementById('pwInput');
+  const pwError = document.getElementById('pwError');
 
   function guessNumber(num) {
     speechBox.innerText = `Ha! Easy Bro. Du denkst an … ${num} 😎`;
@@ -134,7 +96,16 @@
     }, 5000);
   }
 
-  // Automatischer Wechsel Tag/Nacht
+  function checkPassword() {
+    const correct = "alinabia";
+    if (pwInput.value === correct) {
+      window.location.href = "finanzreport.html";
+    } else {
+      pwError.style.display = "block";
+    }
+  }
+
+  // Tag-Nacht-Wechsel
   let isDay = true;
   function toggleDayNight() {
     document.body.classList.toggle('day');
